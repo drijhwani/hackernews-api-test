@@ -181,6 +181,75 @@ func TestAcceptance_DeletedItemReturnsNull(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestAcceptance_UpdatesEndpoint(t *testing.T) {
+	log.Println("TestAcceptance_UpdatesEndpoint started")
+	var updates struct {
+		Items    []int    `json:"items"`
+		Profiles []string `json:"profiles"`
+	}
+	err := retryRequest(func() error {
+		return getJSON(t, baseURL+"/updates.json", &updates)
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, updates)
+
+	// At least one of items or profiles should be non-empty
+	assert.True(t, len(updates.Items) > 0 || len(updates.Profiles) > 0, "Updates should contain items or profiles")
+}
+
+func TestAcceptance_UpdatesItemValidation(t *testing.T) {
+	log.Println("TestAcceptance_UpdatesItemValidation started")
+	var updates struct {
+		Items    []int    `json:"items"`
+		Profiles []string `json:"profiles"`
+	}
+	err := retryRequest(func() error {
+		return getJSON(t, baseURL+"/updates.json", &updates)
+	})
+	assert.NoError(t, err)
+
+	if len(updates.Items) == 0 {
+		t.Skip("No updated items found")
+	}
+
+	var item struct {
+		ID   int    `json:"id"`
+		Type string `json:"type"`
+	}
+	err = retryRequest(func() error {
+		return getJSON(t, baseURL+"/item/"+stringifyID(updates.Items[0])+".json", &item)
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, updates.Items[0], item.ID)
+	assert.NotEmpty(t, item.Type)
+}
+
+func TestAcceptance_UpdatesProfileValidation(t *testing.T) {
+	log.Println("TestAcceptance_UpdatesProfileValidation started")
+	var updates struct {
+		Items    []int    `json:"items"`
+		Profiles []string `json:"profiles"`
+	}
+	err := retryRequest(func() error {
+		return getJSON(t, baseURL+"/updates.json", &updates)
+	})
+	assert.NoError(t, err)
+
+	if len(updates.Profiles) == 0 {
+		t.Skip("No updated profiles found")
+	}
+
+	var profile struct {
+		ID    string `json:"id"`
+		About string `json:"about"`
+	}
+	err = retryRequest(func() error {
+		return getJSON(t, baseURL+"/user/"+updates.Profiles[0]+".json", &profile)
+	})
+	assert.NoError(t, err)
+	assert.Equal(t, updates.Profiles[0], profile.ID)
+}
+
 func TestAPI_GetTopStories(t *testing.T) {
 	log.Println("TestAPI_GetTopStories started")
 	var storyIDs []int
