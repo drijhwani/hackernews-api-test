@@ -18,7 +18,7 @@ func stringifyID(id int) string {
 	return fmt.Sprintf("%d", id)
 }
 
-func getJSON(t *testing.T, url string, target interface{}) error {
+func getJSON(url string, target interface{}) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("GET failed for %s: %v", url, err)
@@ -57,7 +57,7 @@ func TestAcceptance_RetrieveTopStories(t *testing.T) {
 	log.Println("TestAcceptance_RetrieveTopStories started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -67,7 +67,7 @@ func TestAcceptance_TopStoryDetails(t *testing.T) {
 	log.Println("TestAcceptance_TopStoryDetails started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -78,7 +78,7 @@ func TestAcceptance_TopStoryDetails(t *testing.T) {
 		Type  string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
+		return getJSON(baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, storyIDs[0], story.ID)
@@ -90,7 +90,7 @@ func TestAcceptance_TopStoryFirstComment(t *testing.T) {
 	log.Println("TestAcceptance_TopStoryFirstComment started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -100,7 +100,7 @@ func TestAcceptance_TopStoryFirstComment(t *testing.T) {
 		Kids []int `json:"kids"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
+		return getJSON(baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
 	})
 	assert.NoError(t, err)
 
@@ -114,7 +114,7 @@ func TestAcceptance_TopStoryFirstComment(t *testing.T) {
 		Type string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(story.Kids[0])+".json", &comment)
+		return getJSON(baseURL+"/item/"+stringifyID(story.Kids[0])+".json", &comment)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, "comment", comment.Type)
@@ -125,7 +125,7 @@ func TestAcceptance_NewStoriesList(t *testing.T) {
 	log.Println("TestAcceptance_NewStoriesList started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/newstories.json", &storyIDs)
+		return getJSON(baseURL+"/newstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -135,7 +135,7 @@ func TestAcceptance_BestStoriesList(t *testing.T) {
 	log.Println("TestAcceptance_BestStoriesList started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/beststories.json", &storyIDs)
+		return getJSON(baseURL+"/beststories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -145,7 +145,7 @@ func TestAcceptance_ItemTypeValidation(t *testing.T) {
 	log.Println("TestAcceptance_ItemTypeValidation started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -155,7 +155,7 @@ func TestAcceptance_ItemTypeValidation(t *testing.T) {
 		Type string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &item)
+		return getJSON(baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &item)
 	})
 	assert.NoError(t, err)
 	validTypes := map[string]bool{"story": true, "comment": true, "poll": true, "job": true, "pollopt": true}
@@ -188,7 +188,7 @@ func TestAcceptance_UpdatesEndpoint(t *testing.T) {
 		Profiles []string `json:"profiles"`
 	}
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/updates.json", &updates)
+		return getJSON(baseURL+"/updates.json", &updates)
 	})
 	assert.NoError(t, err)
 	assert.NotNil(t, updates)
@@ -204,7 +204,7 @@ func TestAcceptance_UpdatesItemValidation(t *testing.T) {
 		Profiles []string `json:"profiles"`
 	}
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/updates.json", &updates)
+		return getJSON(baseURL+"/updates.json", &updates)
 	})
 	assert.NoError(t, err)
 
@@ -217,7 +217,7 @@ func TestAcceptance_UpdatesItemValidation(t *testing.T) {
 		Type string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(updates.Items[0])+".json", &item)
+		return getJSON(baseURL+"/item/"+stringifyID(updates.Items[0])+".json", &item)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, updates.Items[0], item.ID)
@@ -231,7 +231,7 @@ func TestAcceptance_UpdatesProfileValidation(t *testing.T) {
 		Profiles []string `json:"profiles"`
 	}
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/updates.json", &updates)
+		return getJSON(baseURL+"/updates.json", &updates)
 	})
 	assert.NoError(t, err)
 
@@ -244,7 +244,7 @@ func TestAcceptance_UpdatesProfileValidation(t *testing.T) {
 		About string `json:"about"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/user/"+updates.Profiles[0]+".json", &profile)
+		return getJSON(baseURL+"/user/"+updates.Profiles[0]+".json", &profile)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, updates.Profiles[0], profile.ID)
@@ -254,7 +254,7 @@ func TestAPI_GetTopStories(t *testing.T) {
 	log.Println("TestAPI_GetTopStories started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -264,7 +264,7 @@ func TestAPI_GetTopStoryItem(t *testing.T) {
 	log.Println("TestAPI_GetTopStoryItem started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -275,7 +275,7 @@ func TestAPI_GetTopStoryItem(t *testing.T) {
 		Type  string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
+		return getJSON(baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, storyIDs[0], story.ID)
@@ -287,7 +287,7 @@ func TestAPI_GetFirstCommentOfTopStory(t *testing.T) {
 	log.Println("TestAPI_GetFirstCommentOfTopStory started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -297,7 +297,7 @@ func TestAPI_GetFirstCommentOfTopStory(t *testing.T) {
 		Kids []int `json:"kids"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
+		return getJSON(baseURL+"/item/"+stringifyID(storyIDs[0])+".json", &story)
 	})
 	assert.NoError(t, err)
 	if len(story.Kids) == 0 {
@@ -310,7 +310,7 @@ func TestAPI_GetFirstCommentOfTopStory(t *testing.T) {
 		Type string `json:"type"`
 	}
 	err = retryRequest(func() error {
-		return getJSON(t, baseURL+"/item/"+stringifyID(story.Kids[0])+".json", &comment)
+		return getJSON(baseURL+"/item/"+stringifyID(story.Kids[0])+".json", &comment)
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, "comment", comment.Type)
@@ -339,7 +339,7 @@ func TestAPI_TopStoryNoComments(t *testing.T) {
 	log.Println("TestAPI_TopStoryNoComments started")
 	var storyIDs []int
 	err := retryRequest(func() error {
-		return getJSON(t, baseURL+"/topstories.json", &storyIDs)
+		return getJSON(baseURL+"/topstories.json", &storyIDs)
 	})
 	assert.NoError(t, err)
 	assert.Greater(t, len(storyIDs), 0)
@@ -351,7 +351,7 @@ func TestAPI_TopStoryNoComments(t *testing.T) {
 			Kids []int `json:"kids"`
 		}
 		err := retryRequest(func() error {
-			return getJSON(t, baseURL+"/item/"+stringifyID(id)+".json", &story)
+			return getJSON(baseURL+"/item/"+stringifyID(id)+".json", &story)
 		})
 		assert.NoError(t, err)
 		if len(story.Kids) == 0 {
