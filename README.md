@@ -4,20 +4,23 @@ This Go test suite verifies key functionality of the [Hacker News API](https://g
 
 ## ✅ Test Coverage
 
-| Test Name                                 | Description                                                                 |
-|-------------------------------------------|-----------------------------------------------------------------------------|
-| `TestAcceptance_RetrieveTopStories`       | Checks if top stories are returned by the API                              |
-| `TestAcceptance_TopStoryDetails`          | Validates details (ID, title, type) of the first top story                 |
-| `TestAcceptance_TopStoryFirstComment`     | Fetches and verifies the first comment of the top story                   |
-| `TestAcceptance_NewStoriesList`           | Confirms the new stories endpoint returns data                            |
-| `TestAcceptance_BestStoriesList`          | Verifies the best stories endpoint works                                  |
-| `TestAcceptance_ItemTypeValidation`       | Asserts item types are one of `story`, `comment`, `poll`, etc.            |
-| `TestAcceptance_DeletedItemReturnsNull`   | Validates deleted items return `null`                                     |
-| `TestAPI_GetTopStories`                   | Tests basic retrieval of top stories list                                 |
-| `TestAPI_GetTopStoryItem`                 | Fetches the full story data for the top story                             |
-| `TestAPI_GetFirstCommentOfTopStory`       | Retrieves and validates the first comment for the top story               |
-| `TestAPI_InvalidStoryID`                  | Checks that a bad item ID returns `null`                                  |
-| `TestAPI_TopStoryNoComments`             | Skips if all stories have comments; logs the first story without comments |
+| **Test Function**                         | **Description**                                                               |
+| ----------------------------------------- | ----------------------------------------------------------------------------- |
+| `TestAcceptance_RetrieveTopStories`       | Verifies the `/topstories.json` endpoint returns a non-empty list of IDs.     |
+| `TestAcceptance_TopStoryDetails`          | Fetches the top story and checks for a valid `id`, `title`, and type `story`. |
+| `TestAcceptance_TopStoryFirstComment`     | Retrieves the first comment of the top story and validates its structure.     |
+| `TestAcceptance_NewStoriesList`           | Validates the `/newstories.json` endpoint returns story IDs.                  |
+| `TestAcceptance_BestStoriesList`          | Validates the `/beststories.json` endpoint returns story IDs.                 |
+| `TestAcceptance_ItemTypeValidation`       | Confirms that the returned item type is one of the valid types.               |
+| `TestAcceptance_DeletedItemReturnsNull`   | Checks that an invalid item ID returns `"null"`.                              |
+| `TestAcceptance_UpdatesEndpoint`          | Ensures `/updates.json` returns either updated items or profiles.             |
+| `TestAcceptance_UpdatesItemValidation`    | Fetches details of an updated item and checks ID and type fields.             |
+| `TestAcceptance_UpdatesProfileValidation` | Validates the structure of an updated user profile.                           |
+| `TestAPI_GetTopStories`                   | Duplicate of top stories check; ensures IDs are fetched correctly.            |
+| `TestAPI_GetTopStoryItem`                 | Ensures the first top story has a valid `id`, `title`, and type `story`.      |
+| `TestAPI_GetFirstCommentOfTopStory`       | Retrieves and validates the first comment of the top story.                   |
+| `TestAPI_InvalidStoryID`                  | Ensures item ID `0` returns `"null"` as it is invalid/deleted.                |
+| `TestAPI_TopStoryNoComments`              | Scans top stories and finds one without comments to ensure skip logic works.  |
 
 ## 🔁 Retry Logic
 
