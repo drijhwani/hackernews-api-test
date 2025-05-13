@@ -58,3 +58,4 @@ dlv test-- -test.run '{test name}$'
 
 ## Install dependencies
 go get github.com/stretchr/testify/assert
+go install github.com/go-delve/delve/cmd/dlv@latest
